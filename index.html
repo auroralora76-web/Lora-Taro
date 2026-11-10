@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Лора — гадалка и таролог</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0716;--bg2:#1a0f2e;--gold:#e2c275;--gold2:#b8924a;--text:#ece4f5;--muted:#a898bd;--violet:#6b3fa0;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at top,#2a1450 0%,var(--bg) 60%) fixed;color:var(--text);font-family:'Montserrat',system-ui,sans-serif;font-weight:300;line-height:1.7;overflow-x:hidden}
+canvas#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+section,header,footer{position:relative;z-index:1}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;color:var(--gold)}
+nav{display:flex;justify-content:space-between;align-items:center;padding:20px 6vw}
+.logo{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.7rem;color:var(--gold);letter-spacing:.08em}
+.tel{color:var(--text);text-decoration:none;font-weight:400;border:1px solid var(--gold2);padding:8px 18px;border-radius:30px;font-size:.95rem;transition:.3s}
+.tel:hover{background:var(--gold);color:#1a0f2e}
+.hero{text-align:center;padding:7vh 6vw 4vh}
+.hero .sub{letter-spacing:.35em;text-transform:uppercase;font-size:.8rem;color:var(--muted)}
+.hero h1{font-size:clamp(3.2rem,12vw,7rem);line-height:1.05;margin:14px 0;background:linear-gradient(120deg,#f6e3a8,#c9a14f,#f6e3a8);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200%;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:200% 0}}
+.hero p{max-width:560px;margin:0 auto;color:var(--muted);font-size:1.05rem}
+.orn{color:var(--gold2);letter-spacing:.6em;margin:22px 0;font-size:1.1rem}
+.pick{text-align:center;padding:3vh 6vw 8vh}
+.pick h2{font-size:clamp(1.8rem,5vw,2.8rem)}
+.pick .hint{color:var(--muted);margin:6px 0 40px}
+.cards{display:flex;justify-content:center;gap:clamp(14px,4vw,44px);flex-wrap:wrap;perspective:1200px}
+.card{width:clamp(130px,26vw,220px);aspect-ratio:2/3.2;display:block;text-decoration:none;position:relative;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.8,.2,1);animation:float 5s ease-in-out infinite;cursor:pointer}
+.card:nth-child(2){animation-delay:-1.6s}.card:nth-child(3){animation-delay:-3.2s}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -16px}}
+.card:hover{transform:rotateY(8deg) scale(1.05)}
+.card.flip{transform:rotateY(180deg) scale(1.08);animation-play-state:paused}
+.face{position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid var(--gold2);box-shadow:0 0 30px rgba(226,194,117,.25),inset 0 0 40px rgba(0,0,0,.4)}
+.back{background:repeating-linear-gradient(45deg,#2b1552 0 10px,#35196a 10px 20px);}
+.back::before{content:"";position:absolute;inset:10px;border:1px solid var(--gold2);border-radius:10px}
+.back .star{font-size:clamp(3rem,8vw,5rem);color:var(--gold);text-shadow:0 0 20px var(--gold)}
+.front{transform:rotateY(180deg);background:linear-gradient(160deg,#f6e3a8,#c9a14f);color:#2a1450;text-align:center;padding:14px}
+.front .sym{font-size:clamp(3rem,8vw,5rem)}
+.front b{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1.1rem,3vw,1.6rem);font-weight:700}
+.front small{font-size:.75rem;margin-top:6px;font-weight:500}
+.glow{position:absolute;inset:-20px;background:radial-gradient(circle,rgba(226,194,117,.25),transparent 70%);z-index:-1;border-radius:50%}
+.services{padding:8vh 6vw;max-width:1100px;margin:auto}
+.services h2,.about h2{text-align:center;font-size:clamp(1.8rem,5vw,2.8rem);margin-bottom:36px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px}
+.item{background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(226,194,117,.25);border-radius:16px;padding:28px 24px;backdrop-filter:blur(6px);transition:.4s}
+.item:hover{transform:translateY(-6px);border-color:var(--gold)}
+.item .ic{font-size:2rem;color:var(--gold)}
+.item h3{font-size:1.5rem;margin:8px 0}
+.item p{color:var(--muted);font-size:.95rem}
+.about{padding:6vh 6vw 8vh;text-align:center;max-width:760px;margin:auto}
+.about p{color:var(--muted);font-size:1.05rem}
+.cta{text-align:center;padding:8vh 6vw;background:linear-gradient(180deg,transparent,rgba(107,63,160,.25))}
+.cta h2{font-size:clamp(1.8rem,5vw,2.8rem)}
+.btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-block;padding:15px 34px;border-radius:40px;text-decoration:none;font-weight:500;letter-spacing:.05em;transition:.3s}
+.btn.wa{background:linear-gradient(120deg,#e2c275,#b8924a);color:#1a0f2e;box-shadow:0 0 25px rgba(226,194,117,.4)}
+.btn.wa:hover{transform:scale(1.06)}
+.btn.ph{border:1px solid var(--gold2);color:var(--text)}
+.btn.ph:hover{background:rgba(226,194,117,.15)}
+footer{text-align:center;padding:30px 6vw 40px;color:var(--muted);font-size:.85rem}
+.reveal{opacity:0;transform:translateY(30px);transition:1s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<header>
+  <nav>
+    <div class="logo">Лора</div>
+    <a class="tel" id="telTop" href="#">Позвонить</a>
+  </nav>
+  <div class="hero">
+    <div class="sub">Гадание · Таро · Предсказания</div>
+    <h1>Лора</h1>
+    <div class="orn">✦ ✦ ✦</div>
+    <p>Карты знают ответы на ваши вопросы. Узнайте, что ждёт вас в любви, деньгах и судьбе.</p>
+  </div>
+</header>
+
+<section class="pick">
+  <h2>Выберите свою карту</h2>
+  <p class="hint">Доверьтесь интуиции — нажмите на карту, и мы начнём разговор в WhatsApp</p>
+  <div class="cards">
+    <a class="card" data-msg="Здравствуйте, Лора! Я выбрал(а) карту «Любовь». Хочу узнать про отношения." target="_blank" rel="noopener"><span class="glow"></span>
+      <div class="face back"><span class="star">✦</span></div>
+      <div class="face front"><span class="sym">♥</span><b>Любовь</b><small>Отношения и чувства</small></div></a>
+    <a class="card" data-msg="Здравствуйте, Лора! Я выбрал(а) карту «Судьба». Хочу узнать своё будущее." target="_blank" rel="noopener"><span class="glow"></span>
+      <div class="face back"><span class="star">✦</span></div>
+      <div class="face front"><span class="sym">☾</span><b>Судьба</b><small>Путь и будущее</small></div></a>
+    <a class="card" data-msg="Здравствуйте, Лора! Я выбрал(а) карту «Удача». Хочу узнать про деньги и работу." target="_blank" rel="noopener"><span class="glow"></span>
+      <div class="face back"><span class="star">✦</span></div>
+      <div class="face front"><span class="sym">☀</span><b>Удача</b><small>Деньги и успех</small></div></a>
+  </div>
+</section>
+
+<section class="services">
+  <h2 class="reveal">Чем я могу помочь</h2>
+  <div class="grid">
+    <div class="item reveal"><div class="ic">♥</div><h3>Любовь и отношения</h3><p>Расклад на чувства, совместимость, возвращение и будущее пары.</p></div>
+    <div class="item reveal"><div class="ic">☾</div><h3>Расклад на судьбу</h3><p>Ответы на главные вопросы: куда идти, что изменить и чего ждать.</p></div>
+    <div class="item reveal"><div class="ic">☀</div><h3>Деньги и работа</h3><p>Карьера, финансы, важные решения и благоприятные периоды.</p></div>
+    <div class="item reveal"><div class="ic">✧</div><h3>Совет на день</h3><p>Короткий расклад на ближайшие дни и подсказка от карт.</p></div>
+  </div>
+</section>
+
+<section class="about reveal">
+  <h2>Обо мне</h2>
+  <p>Меня зовут Лора. Я работаю с картами и помогаю людям увидеть ситуацию яснее. Каждый расклад — это бережный и честный разговор, без лишних слов. Напишите мне, и мы разберём ваш вопрос.</p>
+</section>
+
+<section class="cta">
+  <h2 class="reveal">Запишитесь на гадание</h2>
+  <div class="btns">
+    <a class="btn wa" id="waBtn" target="_blank" rel="noopener">Написать в WhatsApp</a>
+    <a class="btn ph" id="telBtn" href="#"></a>
+  </div>
+</section>
+
+<footer>© Лора · Гадание и таро</footer>
+
+<script>
+// ВАЖНО: впишите номер телефона здесь (международный формат, только цифры).
+var PHONE_DIGITS = "380639432782";
+var PHONE_TEXT = "+380 (63) 943-27-82";
+
+function wa(msg){return "https://wa.me/" + PHONE_DIGITS + "?text=" + encodeURIComponent(msg)}
+var tel = "tel:+" + PHONE_DIGITS;
+document.getElementById("telTop").href = tel;
+document.getElementById("telBtn").href = tel;
+document.getElementById("telBtn").textContent = PHONE_TEXT;
+document.getElementById("waBtn").href = wa("Здравствуйте, Лора! Хочу записаться на гадание.");
+
+document.querySelectorAll(".card").forEach(function(c){
+  c.href = wa(c.dataset.msg);
+  c.addEventListener("click", function(){
+    c.classList.add("flip");
+    setTimeout(function(){c.classList.remove("flip")}, 2500);
+  });
+});
+
+var io = new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add("in")})},{threshold:.15});
+document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
+
+var cv = document.getElementById("stars"), ctx = cv.getContext("2d"), S = [];
+function size(){cv.width = innerWidth; cv.height = innerHeight;
+  S = Array.from({length: Math.min(120, innerWidth/8)}, function(){return {x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.4+.3,p:Math.random()*6}})}
+function draw(t){ctx.clearRect(0,0,cv.width,cv.height);
+  S.forEach(function(s){ctx.globalAlpha = .3 + .7*Math.abs(Math.sin(t/1200 + s.p));ctx.fillStyle="#f6e3a8";ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.3);ctx.fill()});
+  requestAnimationFrame(draw)}
+size(); addEventListener("resize", size); requestAnimationFrame(draw);
+</script>
+</body>
+</html>
